@@ -21,8 +21,19 @@ while True:
     print('Message received from client: ', message.decode())
 
     # Modificando a mensagem para letras maiúsculas
-    modifiedMessage = message.decode().upper()
-    modifiedMessage = 'AOPA BÃO'
+    # modifiedMessage = message.decode().upper()
+    # modifiedMessage = 'AOPA BÃO'
+
+    # Testando comando pwd
+    command = message.decode().strip()
+
+    if command == 'pwd':
+        import os
+        current_dir = os.getcwd()
+
+        serverSocket.sendto(current_dir.encode(), clientAddress)
+    else:
+        serverSocket.sendto("Comando invalido".encode(), clientAddress)
 
     # Enviando a mensagem modificada de volta para o cliente
-    serverSocket.sendto(modifiedMessage.encode(), clientAddress)
+    # serverSocket.sendto(modifiedMessage.encode(), clientAddress)
