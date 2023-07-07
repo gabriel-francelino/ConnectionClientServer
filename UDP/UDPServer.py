@@ -37,13 +37,12 @@ while True:
 
     # Comando cd
     def cd_command(*args):
-        new_dir = args[1]
-        print(new_dir)
+        new_dir = args[0]
 
         if os.path.isdir(new_dir):
             os.chdir(new_dir)
             current_dir = pwd_command()
-            serverSocket.sendto(f"Current directory: {current_dir}".encode, clientAddress)
+            serverSocket.sendto(f"Current directory: {current_dir}".encode(), clientAddress)
         else:
             serverSocket.sendto("Diretório inválido".encode(), clientAddress)
 
@@ -57,7 +56,7 @@ while True:
     if command == 'ls':
         ls_command()
     if command == 'cd':
-        cd_command(command)
+        cd_command(*args)
     else:
         serverSocket.sendto("Comando invalido".encode(), clientAddress)
 
