@@ -48,8 +48,10 @@ while True:
 
     # Comando scp
  
+    # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
 
+    # Execução dos comando
     if command == 'pwd':     
         pwd_command()
     elif command == 'ls':
