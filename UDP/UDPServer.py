@@ -48,7 +48,6 @@ while True:
 
     # Comando scp
  
- 
     command, *args = message.decode().strip().split()
 
     if command == 'pwd':     
