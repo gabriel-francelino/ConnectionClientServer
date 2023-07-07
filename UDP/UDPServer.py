@@ -32,7 +32,7 @@ while True:
 
     # Comando ls
     def ls_command():
-        file_list = "\n".join(os.listdir())
+        file_list = '\n'.join(os.listdir())
         serverSocket.sendto(file_list.encode(), clientAddress)
 
     # Comando cd
@@ -53,9 +53,9 @@ while True:
 
     if command == 'pwd':     
         pwd_command()
-    if command == 'ls':
+    elif command == 'ls':
         ls_command()
-    if command == 'cd':
+    elif command == 'cd':
         cd_command(*args)
     else:
         serverSocket.sendto("Comando invalido".encode(), clientAddress)
