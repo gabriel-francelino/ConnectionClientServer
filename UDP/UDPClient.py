@@ -1,4 +1,4 @@
-from socket import socket, AF_INET, SOCK_DGRAM
+from socket import socket, SOCK_DGRAM, AF_INET
 
 # Definindo o nome do servidor e a porta
 # Tem que alterar o serverName na hora de testar
@@ -11,7 +11,7 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 # Solicitando que o usuário insira uma frase em letras minúsculas
 message = input('Input lowercase sentence:')
 
-# Enviando a mensagem para o servidor especificado pelo nome e porta
+# Enviando a mensagem codificada para o servidor especificado pelo nome e porta
 clientSocket.sendto(message.encode(), (serverName, serverPort))
 
 # Recebendo a resposta modificada do servidor e o endereço do servidor
