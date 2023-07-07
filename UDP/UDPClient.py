@@ -1,4 +1,5 @@
-from socket import socket, SOCK_DGRAM, AF_INET
+# importando o módulo de soquete
+import socket
 
 # Definindo o nome do servidor e a porta
 # Tem que alterar o serverName na hora de testar
@@ -6,12 +7,13 @@ serverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete UDP
-clientSocket = socket(AF_INET, SOCK_DGRAM)
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 while True:
-    # Solicitando que o usuário insira uma frase em letras minúsculas
-    message = input('Input lowercase sentence:')
+    # Entrada dos comandos
+    message = input('$: ')
     
+    # O comando exit fecha o cliente
     if message == 'exit':
         break
 

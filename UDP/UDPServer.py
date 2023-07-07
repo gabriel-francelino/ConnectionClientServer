@@ -1,11 +1,11 @@
-from socket import *
-import os
+# importando as bibliotecas necessárias
+import socket, os
 
 # Definindo a porta do servidor
 serverPort = 12000
 
 # Criando um objeto de soquete usando o protocolo UDP
-serverSocket = socket(AF_INET, SOCK_DGRAM)
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # Vinculando o soquete do servidor a um endereço IP vazio e à porta especificada
 serverSocket.bind(('', serverPort))
@@ -21,10 +21,6 @@ while True:
     # Imprimindo a mensagem recebida do cliente
     print('Message received from client: ', message.decode())
 
-    # Modificando a mensagem para letras maiúsculas
-    # modifiedMessage = message.decode().upper()
-    # modifiedMessage = 'AOPA BÃO'
-
     # Comando pwd
     def pwd_command():
         current_dir = os.getcwd()
@@ -32,6 +28,7 @@ while True:
 
     # Comando ls
     def ls_command():
+        # Transforma a lista de arquivos em uma string
         file_list = '\n'.join(os.listdir())
         serverSocket.sendto(file_list.encode(), clientAddress)
 
@@ -39,6 +36,7 @@ while True:
     def cd_command(*args):
         new_dir = args[0]
 
+        # Verifica se o diretório existe e muda para ele se existir
         if os.path.isdir(new_dir):
             os.chdir(new_dir)
             current_dir = os.getcwd()
