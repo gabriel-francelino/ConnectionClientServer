@@ -1,4 +1,5 @@
 from socket import *
+import os
 
 # Definindo a porta do servidor
 serverPort = 12000
@@ -24,14 +25,16 @@ while True:
     # modifiedMessage = message.decode().upper()
     # modifiedMessage = 'AOPA BÃO'
 
-    # Testando comando pwd
-    command = message.decode().strip()
-
-    if command == 'pwd':
-        import os
+    # Comando pwd
+    def pwd_command(c):
         current_dir = os.getcwd()
-
         serverSocket.sendto(current_dir.encode(), clientAddress)
+
+    command = message.decode().strip().split()[0]
+
+    if command == 'pwd':     
+        pwd_command(command)
+    
     else:
         serverSocket.sendto("Comando invalido".encode(), clientAddress)
 
