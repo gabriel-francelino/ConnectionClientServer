@@ -22,6 +22,7 @@ while True:
 
     # Modificando a mensagem para letras maiúsculas
     modifiedMessage = message.decode().upper()
+    modifiedMessage = 'AOPA BÃO'
 
     # Enviando a mensagem modificada de volta para o cliente
     serverSocket.sendto(modifiedMessage.encode(), clientAddress)

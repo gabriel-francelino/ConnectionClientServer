@@ -1,7 +1,8 @@
 from socket import socket, AF_INET, SOCK_DGRAM
 
 # Definindo o nome do servidor e a porta
-serverName = 'hostname'
+# Tem que alterar o serverName na hora de testar
+serverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete UDP
