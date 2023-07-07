@@ -41,10 +41,10 @@ while True:
 
         if os.path.isdir(new_dir):
             os.chdir(new_dir)
-            current_dir = pwd_command()
-            serverSocket.sendto(f"Current directory: {current_dir}".encode(), clientAddress)
+            current_dir = os.getcwd()
+            serverSocket.sendto(f'Current directory: {current_dir}'.encode(), clientAddress)
         else:
-            serverSocket.sendto("Diretório inválido".encode(), clientAddress)
+            serverSocket.sendto('Diretório inválido'.encode(), clientAddress)
 
     # Comando scp
  
@@ -59,7 +59,5 @@ while True:
     elif command == 'cd':
         cd_command(*args)
     else:
-        serverSocket.sendto("Comando invalido".encode(), clientAddress)
+        serverSocket.sendto('Comando invalido'.encode(), clientAddress)
 
-    # Enviando a mensagem modificada de volta para o cliente
-    # serverSocket.sendto(modifiedMessage.encode(), clientAddress)
