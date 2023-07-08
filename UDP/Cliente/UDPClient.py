@@ -25,16 +25,14 @@ while True:
         # Separando o comando dos argumentos
         command, *args = message.strip().split()
         
+        ### ACHO QUE É AO CONTRÁRIO, O SERVIDOR VAI COPIAR O ARQUIVO NO PATH DO CLIENTE
         # Verificando se o arquivo existe
         try:
             # Verificando se o arquivo existe
-            if not os.path.isfile(args[0]):
-                print(f"File '{args[0]}' does not exist.")
-                #exit()
-            else:
-                # Enviando o comando para o servidor
+            if os.path.isfile(args[0]):
+                # Enviando o nome do arquivo para o servidor
                 clientSocket.sendto(args[0].encode(), (serverName, serverPort))
-            
+                
             # Abrindo arquivo para leiura em bytes
             with open(args[0], 'rb') as file:
                 # Enviando o arquivo para o servidor
@@ -44,8 +42,6 @@ while True:
             print('File not found.')
             continue
     
-        
-
     # Recebendo a resposta modificada do servidor e o endereço do servidor
     modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
 

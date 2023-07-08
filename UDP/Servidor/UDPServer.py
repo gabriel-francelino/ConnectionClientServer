@@ -54,6 +54,7 @@ while True:
         file_data, _ = serverSocket.recvfrom(65536)
         
         # Salvando o arquivo no diretório desejado no servidor
+        # teste para ver se estava copiando mesmo: file_name = '../Cliente/teste.txt'
         with open(file_name, 'wb') as file:
             file.write(file_data)
             
