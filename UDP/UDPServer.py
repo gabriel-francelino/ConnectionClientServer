@@ -42,7 +42,7 @@ while True:
             current_dir = os.getcwd()
             serverSocket.sendto(f'Current directory: {current_dir}'.encode(), clientAddress)
         else:
-            serverSocket.sendto('Diretório inválido'.encode(), clientAddress)
+            serverSocket.sendto('Invalid directory'.encode(), clientAddress)
 
     # Comando scp
     def scp_command():
@@ -75,5 +75,5 @@ while True:
     elif command == 'scp':
         scp_command()
     else:
-        serverSocket.sendto('Comando invalido'.encode(), clientAddress)
+        serverSocket.sendto('Invalid command'.encode(), clientAddress)
 

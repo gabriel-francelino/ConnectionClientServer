@@ -41,7 +41,7 @@ while True:
                 file_data = file.read()
                 clientSocket.sendto(file_data, (serverName, serverPort))
         except FileNotFoundError:
-            print('Arquivo não encontrado')
+            print('File not found.')
             continue
     
         
