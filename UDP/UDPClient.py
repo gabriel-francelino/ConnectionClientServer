@@ -1,5 +1,5 @@
 # importando o módulo de soquete
-import socket
+import socket, os
 
 # Definindo o nome do servidor e a porta
 # Tem que alterar o serverName na hora de testar
@@ -16,9 +16,35 @@ while True:
     # O comando exit fecha o cliente
     if message == 'exit':
         break
-
+    
     # Enviando a mensagem codificada para o servidor especificado pelo nome e porta
     clientSocket.sendto(message.encode(), (serverName, serverPort))
+    
+    # Comando scp
+    if message.split()[0] == 'scp':
+        # Separando o comando dos argumentos
+        command, *args = message.strip().split()
+        
+        # Verificando se o arquivo existe
+        try:
+            # Verificando se o arquivo existe
+            if not os.path.isfile(args[0]):
+                print(f"File '{args[0]}' does not exist.")
+                #exit()
+            else:
+                # Enviando o comando para o servidor
+                clientSocket.sendto(args[0].encode(), (serverName, serverPort))
+            
+            # Abrindo arquivo para leiura em bytes
+            with open(args[0], 'rb') as file:
+                # Enviando o arquivo para o servidor
+                file_data = file.read()
+                clientSocket.sendto(file_data, (serverName, serverPort))
+        except FileNotFoundError:
+            print('Arquivo não encontrado')
+            continue
+    
+        
 
     # Recebendo a resposta modificada do servidor e o endereço do servidor
     modifiedMessage, serverAddress = clientSocket.recvfrom(2048)

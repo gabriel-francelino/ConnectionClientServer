@@ -45,6 +45,22 @@ while True:
             serverSocket.sendto('Diretório inválido'.encode(), clientAddress)
 
     # Comando scp
+    def scp_command():
+        # Recebendo o nome do arquivo
+        file_name, _ = serverSocket.recvfrom(2048)
+        file_name = file_name.decode()
+
+        # Recebendo o conteúdo do arquivo em pacotes
+        file_data, _ = serverSocket.recvfrom(65536)
+        
+        # Salvando o arquivo no diretório desejado no servidor
+        with open(file_name, 'wb') as file:
+            file.write(file_data)
+            
+        print(f"File '{file_name}' received and saved.")
+            
+        # Enviando uma confirmação para o cliente
+        serverSocket.sendto("File received and saved.".encode(), clientAddress)
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
@@ -56,6 +72,8 @@ while True:
         ls_command()
     elif command == 'cd':
         cd_command(*args)
+    elif command == 'scp':
+        scp_command()
     else:
         serverSocket.sendto('Comando invalido'.encode(), clientAddress)
 
