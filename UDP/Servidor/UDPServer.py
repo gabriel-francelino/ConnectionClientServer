@@ -50,13 +50,19 @@ while True:
         file_name, _ = serverSocket.recvfrom(2048)
         file_name = file_name.decode()
 
+        try:
+            if os.path.isfile(file_name):
+                print('Tem arquivo mano.')
+        except FileNotFoundError:
+            print('Achei esse trem não')
+
         # Recebendo o conteúdo do arquivo em pacotes
-        file_data, _ = serverSocket.recvfrom(65536)
+        # file_data, _ = serverSocket.recvfrom(65536)
         
         # Salvando o arquivo no diretório desejado no servidor
         # teste para ver se estava copiando mesmo: file_name = '../Cliente/teste.txt'
-        with open(file_name, 'wb') as file:
-            file.write(file_data)
+        # with open(file_name, 'wb') as file:
+        #     file.write(file_data)
             
         print(f"File '{file_name}' received and saved.")
             

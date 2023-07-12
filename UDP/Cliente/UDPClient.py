@@ -24,23 +24,24 @@ while True:
     if message.split()[0] == 'scp':
         # Separando o comando dos argumentos
         command, *args = message.strip().split()
+        clientSocket.sendto(args[0].encode(), (serverName, serverPort))
         
-        ### ACHO QUE É AO CONTRÁRIO, O SERVIDOR VAI COPIAR O ARQUIVO NO PATH DO CLIENTE
-        # Verificando se o arquivo existe
-        try:
-            # Verificando se o arquivo existe
-            if os.path.isfile(args[0]):
-                # Enviando o nome do arquivo para o servidor
-                clientSocket.sendto(args[0].encode(), (serverName, serverPort))
+        # ### ACHO QUE É AO CONTRÁRIO, O SERVIDOR VAI COPIAR O ARQUIVO NO PATH DO CLIENTE
+        # # Verificando se o arquivo existe
+        # try:
+        #     # Verificando se o arquivo existe
+        #     if os.path.isfile(args[0]):
+        #         # Enviando o nome do arquivo para o servidor
+        #         clientSocket.sendto(args[0].encode(), (serverName, serverPort))
                 
-            # Abrindo arquivo para leiura em bytes
-            with open(args[0], 'rb') as file:
-                # Enviando o arquivo para o servidor
-                file_data = file.read()
-                clientSocket.sendto(file_data, (serverName, serverPort))
-        except FileNotFoundError:
-            print('File not found.')
-            continue
+        #     # Abrindo arquivo para leiura em bytes
+        #     with open(args[0], 'rb') as file:
+        #         # Enviando o arquivo para o servidor
+        #         file_data = file.read()
+        #         clientSocket.sendto(file_data, (serverName, serverPort))
+        # except FileNotFoundError:
+        #     print('File not found.')
+        #     continue
     
     # Recebendo a resposta modificada do servidor e o endereço do servidor
     modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
