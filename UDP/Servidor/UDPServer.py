@@ -50,10 +50,23 @@ while True:
         file_name, _ = serverSocket.recvfrom(2048)
         file_name = file_name.decode()
 
-        try:
-            if os.path.isfile(file_name):
-                print('Tem arquivo mano.')
-        except FileNotFoundError:
+        
+        # Verificando se o arquivo existe
+        if os.path.exists(file_name):
+            print('Tem arquivo mano.')
+
+            file_size = os.path.getsize(file_name)
+            serverSocket.sendto(str(file_size).encode(), clientAddress)
+            max_packet_size = 1024
+            with open(file_name, 'rb') as file:
+                # Enviando o arquivo para o servidor
+                # Precisa trocar para para decrementar o tamanho do arquivo
+                while True: 
+                    packet = file.read(max_packet_size)
+                    if not packet:
+                        break
+                    serverSocket.sendto(packet, clientAddress)
+        else:
             print('Achei esse trem não')
 
         # Recebendo o conteúdo do arquivo em pacotes
@@ -64,10 +77,10 @@ while True:
         # with open(file_name, 'wb') as file:
         #     file.write(file_data)
             
-        print(f"File '{file_name}' received and saved.")
+        #print(f"File '{file_name}' received and saved.")
             
         # Enviando uma confirmação para o cliente
-        serverSocket.sendto("File received and saved.".encode(), clientAddress)
+        serverSocket.sendto("File received.".encode(), clientAddress)
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
