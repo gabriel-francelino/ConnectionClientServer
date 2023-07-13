@@ -56,24 +56,31 @@ while True:
             print('Tem arquivo mano.')
 
             # Obtem o tamanho do arquivo
-            file_size = os.path.getsize(file_name)
+            file_size = int(os.path.getsize(file_name))
             
             # Envia o tamanho do arquivo para o cliente
             serverSocket.sendto(str(file_size).encode(), clientAddress)
             
             # Tamanho máximo do pacote
-            max_packet_size = 1024
+            max_packet_size = 1500
             
             # Abrindo arquivo para leitura binária
             
             with open(file_name, 'rb') as file:
                 # Enviando o arquivo para o servidor
-                file_data = file.read(1)
+                #file_data = file.read(1)
                 byte = 0
-                while byte < int(file_size): 
-                    serverSocket.sendto(file_data, clientAddress)
-                    file_data = file.read(1)
-                    byte += 1
+                limite = file_size
+                print(file_size)
+                while file_size > 0: 
+                    if(file_size > max_packet_size):
+                        file_data = file.read(1500)
+                        serverSocket.sendto(file_data, clientAddress)
+                    else:
+                        file_data = file.read(file_size)
+                        serverSocket.sendto(file_data, clientAddress)
+                    file_size -= 1500
+                    print(file_size)
                 print('Tá tudo entregue parceiro')
             #--------------------------------------------------
             # with open(file_name, 'rb') as file:

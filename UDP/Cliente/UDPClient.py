@@ -38,13 +38,20 @@ while True:
         # Recebendo os dados do arquivo do servidor
         #file_data, _ = clientSocket.recvfrom(65536)
         with open(file_name, 'wb') as file:
-            file_data, _ = clientSocket.recvfrom(1)
-            byte = file_size
-            while byte > 0:
-                file.write(file_data)
-                file_data, _ = clientSocket.recvfrom(1)
-                byte -= 1
+            #file_data, _ = clientSocket.recvfrom(1)
+            #byte = file_size
+            while file_size > 0:
+                if(file_size > 0):
+                    file_data, _ = clientSocket.recvfrom(1500)
+                    file.write(file_data)
+                else:
+                    file_data, _ = clientSocket.recvfrom(file_size)
+                    file.write(file_data)
+                file_size -= 1500
             print('Chegou mais rápido que o SEDEX')
+            file_size1 = str(os.path.getsize(file_name))
+            print('new file size: ' + file_size1)
+
         #---------------------------------------------
         # file_data = b''
         # while True:
