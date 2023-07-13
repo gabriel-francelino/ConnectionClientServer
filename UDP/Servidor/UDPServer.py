@@ -65,47 +65,26 @@ while True:
             max_packet_size = 1500
             
             # Abrindo arquivo para leitura binária
-            
             with open(file_name, 'rb') as file:
                 # Enviando o arquivo para o servidor
-                #file_data = file.read(1)
-                byte = 0
-                limite = file_size
-                print(file_size)
+                print(f'Tamanho do arquivo a ser eniado: {file_size}')
                 while file_size > 0: 
+                    # Se o tamanho do arquivo for maior que o limite do pacote
+                    # será enviado o a quantidade de dados max do pacote
                     if(file_size > max_packet_size):
-                        file_data = file.read(1500)
+                        file_data = file.read(max_packet_size)
                         serverSocket.sendto(file_data, clientAddress)
+                    # Se não, será enviado o tamanho que falta
                     else:
                         file_data = file.read(file_size)
                         serverSocket.sendto(file_data, clientAddress)
-                    file_size -= 1500
-                    print(file_size)
+                    file_size -= max_packet_size
                 print('Tá tudo entregue parceiro')
-            #--------------------------------------------------
-            # with open(file_name, 'rb') as file:
-            #     # Enviando o arquivo para o servidor
-            #     # Precisa trocar para para decrementar o tamanho do arquivo
-            #     while True: 
-            #         packet = file.read(max_packet_size)
-            #         if not packet:
-            #             break
-            #         serverSocket.sendto(packet, clientAddress)
         else:
             print('Achei esse trem não')
-
-        # Recebendo o conteúdo do arquivo em pacotes
-        # file_data, _ = serverSocket.recvfrom(65536)
-        
-        # Salvando o arquivo no diretório desejado no servidor
-        # teste para ver se estava copiando mesmo: file_name = '../Cliente/teste.txt'
-        # with open(file_name, 'wb') as file:
-        #     file.write(file_data)
-            
-        #print(f"File '{file_name}' received and saved.")
             
         # Enviando uma confirmação para o cliente
-        serverSocket.sendto("File received.".encode(), clientAddress)
+        serverSocket.sendto('Arquivo copiado com sucesso!'.encode(), clientAddress)
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()

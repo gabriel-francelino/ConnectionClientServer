@@ -33,55 +33,24 @@ while True:
         # Recebendo o tamanho do arquivo
         file_size, _ = clientSocket.recvfrom(2048)
         file_size = int(file_size.decode())
-        print(file_size)
+
+        # Tamanho máximo do pacote
+        max_packet_size = 1500
 
         # Recebendo os dados do arquivo do servidor
-        #file_data, _ = clientSocket.recvfrom(65536)
         with open(file_name, 'wb') as file:
-            #file_data, _ = clientSocket.recvfrom(1)
-            #byte = file_size
             while file_size > 0:
+                # Se o tamanho do arquivo for maior que o limite do pacote
+                # será recebido o a quantidade de dados max do pacote 
                 if(file_size > 0):
-                    file_data, _ = clientSocket.recvfrom(1500)
+                    file_data, _ = clientSocket.recvfrom(max_packet_size)
                     file.write(file_data)
+                # Se não, será recebido o tamanho que falta
                 else:
                     file_data, _ = clientSocket.recvfrom(file_size)
                     file.write(file_data)
-                file_size -= 1500
+                file_size -= max_packet_size
             print('Chegou mais rápido que o SEDEX')
-            file_size1 = str(os.path.getsize(file_name))
-            print('new file size: ' + file_size1)
-
-        #---------------------------------------------
-        # file_data = b''
-        # while True:
-        #     packet, _ = clientSocket.recvfrom(1024)
-        #     if not packet:
-        #         break
-        # file_data += packet
-
-
-        # Escrevendo o nome do arquivo
-        # with open(file_name, 'wb') as file:
-        #     file.write(file_data)
-        #---------------------------------------------
-        
-        # ### ACHO QUE É AO CONTRÁRIO, O SERVIDOR VAI COPIAR O ARQUIVO NO PATH DO CLIENTE
-        # # Verificando se o arquivo existe
-        # try:
-        #     # Verificando se o arquivo existe
-        #     if os.path.isfile(args[0]):
-        #         # Enviando o nome do arquivo para o servidor
-        #         clientSocket.sendto(args[0].encode(), (serverName, serverPort))
-                
-        #     # Abrindo arquivo para leiura em bytes
-        #     with open(args[0], 'rb') as file:
-        #         # Enviando o arquivo para o servidor
-        #         file_data = file.read()
-        #         clientSocket.sendto(file_data, (serverName, serverPort))
-        # except FileNotFoundError:
-        #     print('File not found.')
-        #     continue
     
     # Recebendo a resposta modificada do servidor e o endereço do servidor
     modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
