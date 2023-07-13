@@ -17,7 +17,7 @@ while True:
     if message == 'exit':
         break
     
-    # Enviando a mensagem codificada para o servidor especificado pelo nome e porta
+    # Enviando o comando para o servidor especificado pelo nome e porta
     clientSocket.sendto(message.encode(), (serverName, serverPort))
     
     # Comando scp
@@ -35,22 +35,27 @@ while True:
         file_size = int(file_size.decode())
 
         # Tamanho máximo do pacote
-        max_packet_size = 1500
+        max_packet_size = 1400
 
         # Recebendo os dados do arquivo do servidor
-        with open(file_name, 'wb') as file:
-            while file_size > 0:
-                # Se o tamanho do arquivo for maior que o limite do pacote
-                # será recebido o a quantidade de dados max do pacote 
-                if(file_size > 0):
-                    file_data, _ = clientSocket.recvfrom(max_packet_size)
-                    file.write(file_data)
-                # Se não, será recebido o tamanho que falta
-                else:
-                    file_data, _ = clientSocket.recvfrom(file_size)
-                    file.write(file_data)
+        file = open(file_name, 'wb')
+        while file_size > 0:
+            # Se o tamanho do arquivo for maior que o limite do pacote
+            # será recebido o a quantidade de dados max do pacote 
+            if(file_size > max_packet_size):
+                file_data, _ = clientSocket.recvfrom(max_packet_size)
+                file.write(file_data)
+                clientSocket.sendto('ACK'.encode(), (serverName, serverPort))
                 file_size -= max_packet_size
-            print('Chegou mais rápido que o SEDEX')
+            # Se não, será recebido o tamanho que falta
+            else:
+                file_data, _ = clientSocket.recvfrom(file_size)
+                file.write(file_data)
+                clientSocket.sendto('ACK'.encode(), (serverName, serverPort))
+                file_size -= file_size
+        file.close()
+        print('Chegou mais rápido que o SEDEX')
+        
     
     # Recebendo a resposta modificada do servidor e o endereço do servidor
     modifiedMessage, serverAddress = clientSocket.recvfrom(2048)

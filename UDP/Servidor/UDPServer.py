@@ -1,5 +1,6 @@
 # importando as bibliotecas necessárias
 import socket, os
+import time
 
 # Definindo a porta do servidor
 serverPort = 12000
@@ -62,29 +63,40 @@ while True:
             serverSocket.sendto(str(file_size).encode(), clientAddress)
             
             # Tamanho máximo do pacote
-            max_packet_size = 1500
+            max_packet_size = 1400
             
             # Abrindo arquivo para leitura binária
-            with open(file_name, 'rb') as file:
-                # Enviando o arquivo para o servidor
-                print(f'Tamanho do arquivo a ser eniado: {file_size}')
-                while file_size > 0: 
-                    # Se o tamanho do arquivo for maior que o limite do pacote
-                    # será enviado o a quantidade de dados max do pacote
-                    if(file_size > max_packet_size):
-                        file_data = file.read(max_packet_size)
-                        serverSocket.sendto(file_data, clientAddress)
-                    # Se não, será enviado o tamanho que falta
-                    else:
-                        file_data = file.read(file_size)
-                        serverSocket.sendto(file_data, clientAddress)
+            file = open(file_name, 'rb')
+            # Enviando o arquivo para o servidor
+            print(f'Tamanho do arquivo a ser enviado: {file_size}')
+            while file_size > 0:
+                #time.sleep(0.01)
+                #print(f'falta: {file_size}')
+                # Se o tamanho do arquivo for maior que o limite do pacote
+                # será enviado o a quantidade de dados max do pacote
+                if(file_size > max_packet_size):
+                    file_data = file.read(max_packet_size)
+                    serverSocket.sendto(file_data, clientAddress)
+                    serverSocket.recvfrom(2048)
                     file_size -= max_packet_size
-                print('Tá tudo entregue parceiro')
+                # Se não, será enviado o tamanho que falta
+                else:
+                    file_data = file.read(file_size)
+                    serverSocket.sendto(file_data, clientAddress)
+                    serverSocket.recvfrom(2048)
+                    file_size -= file_size
+            file.close()
+            print('Tá tudo entregue parceiro')
+
+            # Enviando uma confirmação para o cliente
+            serverSocket.sendto('Arquivo copiado com sucesso!'.encode(), clientAddress)
         else:
             print('Achei esse trem não')
+            # Enviando uma confirmação para o cliente
+            serverSocket.sendto('Arquivo não encontrado!!'.encode(), clientAddress)
+        
             
-        # Enviando uma confirmação para o cliente
-        serverSocket.sendto('Arquivo copiado com sucesso!'.encode(), clientAddress)
+        
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
