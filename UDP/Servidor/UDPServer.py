@@ -55,17 +55,35 @@ while True:
         if os.path.exists(file_name):
             print('Tem arquivo mano.')
 
+            # Obtem o tamanho do arquivo
             file_size = os.path.getsize(file_name)
+            
+            # Envia o tamanho do arquivo para o cliente
             serverSocket.sendto(str(file_size).encode(), clientAddress)
+            
+            # Tamanho máximo do pacote
             max_packet_size = 1024
+            
+            # Abrindo arquivo para leitura binária
+            
             with open(file_name, 'rb') as file:
                 # Enviando o arquivo para o servidor
-                # Precisa trocar para para decrementar o tamanho do arquivo
-                while True: 
-                    packet = file.read(max_packet_size)
-                    if not packet:
-                        break
-                    serverSocket.sendto(packet, clientAddress)
+                file_data = file.read(1)
+                byte = 0
+                while byte < int(file_size): 
+                    serverSocket.sendto(file_data, clientAddress)
+                    file_data = file.read(1)
+                    byte += 1
+                print('Tá tudo entregue parceiro')
+            #--------------------------------------------------
+            # with open(file_name, 'rb') as file:
+            #     # Enviando o arquivo para o servidor
+            #     # Precisa trocar para para decrementar o tamanho do arquivo
+            #     while True: 
+            #         packet = file.read(max_packet_size)
+            #         if not packet:
+            #             break
+            #         serverSocket.sendto(packet, clientAddress)
         else:
             print('Achei esse trem não')
 

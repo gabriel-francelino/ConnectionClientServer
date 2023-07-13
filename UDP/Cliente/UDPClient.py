@@ -37,17 +37,27 @@ while True:
 
         # Recebendo os dados do arquivo do servidor
         #file_data, _ = clientSocket.recvfrom(65536)
-        file_data = b''
-        while True:
-            packet, _ = clientSocket.recvfrom(1024)
-            if not packet:
-                break
-        file_data += packet
+        with open(file_name, 'wb') as file:
+            file_data, _ = clientSocket.recvfrom(1)
+            byte = file_size
+            while byte > 0:
+                file.write(file_data)
+                file_data, _ = clientSocket.recvfrom(1)
+                byte -= 1
+            print('Chegou mais rápido que o SEDEX')
+        #---------------------------------------------
+        # file_data = b''
+        # while True:
+        #     packet, _ = clientSocket.recvfrom(1024)
+        #     if not packet:
+        #         break
+        # file_data += packet
 
 
         # Escrevendo o nome do arquivo
-        with open(file_name, 'wb') as file:
-            file.write(file_data)
+        # with open(file_name, 'wb') as file:
+        #     file.write(file_data)
+        #---------------------------------------------
         
         # ### ACHO QUE É AO CONTRÁRIO, O SERVIDOR VAI COPIAR O ARQUIVO NO PATH DO CLIENTE
         # # Verificando se o arquivo existe
