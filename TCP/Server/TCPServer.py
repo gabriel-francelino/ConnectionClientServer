@@ -15,20 +15,20 @@ serverSocket.listen(1)
 # Imprime uma mensagem indicando que o servidor está pronto para receber conexões
 print('The server is ready to receive')
 
-try:
-    while True:
-        # Aguarda uma conexão de um cliente
-        connectionSocket, addr = serverSocket.accept()
-        
-        # Recebe a sentença enviada pelo cliente através da conexão
-        sentence = connectionSocket.recv(1024)
-        
-        # Converte a sentença para letras maiúsculas
-        capitalizedSentence = sentence.upper()
-        
-        # Envia a sentença modificada de volta ao cliente através da conexão
-        connectionSocket.send(capitalizedSentence)
-finally:
+
+while True:
+    # Aguarda uma conexão de um cliente
+    connectionSocket, addr = serverSocket.accept()
+    
+    # Recebe a sentença enviada pelo cliente através da conexão
+    sentence = connectionSocket.recv(1024)
+    
+    # Converte a sentença para letras maiúsculas
+    capitalizedSentence = sentence.upper()
+    
+    # Envia a sentença modificada de volta ao cliente através da conexão
+    connectionSocket.send(capitalizedSentence)
+
     # Fecha a conexão do socket após a resposta ter sido enviada
     # o finally garante que o socket será fechado mesmo que ocorra uma exceção
     connectionSocket.close()

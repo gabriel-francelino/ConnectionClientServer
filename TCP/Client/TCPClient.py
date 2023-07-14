@@ -6,22 +6,28 @@ serverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete TCP
-clientSocket = socket(AF_INET, SOCK_STREAM)
 
-# Conecta o socket ao endereço do servidor e porta
-clientSocket.connect((serverName, serverPort))
+while True:
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    # Conecta o socket ao endereço do servidor e porta
+    clientSocket.connect((serverName, serverPort))
 
-# Solicita ao usuário uma sentença em letras minúsculas
-sentece = input('Input lowercase sentence:')
+    # Solicita ao usuário uma sentença em letras minúsculas
+    sentence = input('$: ')
 
-# Envia a sentença codificada para o servidor através do socket
-clientSocket.send(sentece.encode())
+    # O comando exit fecha o cliente
+    if sentence == 'exit':
+        clientSocket.close()
+        break
 
-# Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
-modifiedSentence = clientSocket.recv(1024)
+    # Envia a sentença codificada para o servidor através do socket
+    clientSocket.send(sentence.encode())
 
-# Imprime a resposta recebida do servidor
-print('From Server: ', modifiedSentence.decode())
+    # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+    modifiedSentence = clientSocket.recv(1024)
 
-# Fecha a conexão do socket
-clientSocket.close()
+    # Imprime a resposta recebida do servidor
+    print('From Server: ', modifiedSentence.decode())
+
+    # Fecha a conexão do socket
+    clientSocket.close()
