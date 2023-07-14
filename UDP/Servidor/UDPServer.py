@@ -35,6 +35,7 @@ while True:
 
     # Comando cd
     def cd_command(*args):
+        # Se o parâmetro for menor que 1, file_name vai receber ' '
         new_dir = args[0] if len(args) > 0 else ' '
 
         # Verifica se o diretório existe e muda para ele se existir
@@ -53,7 +54,7 @@ while True:
 
         
         # Verificando se o arquivo existe
-        if os.path.exists(file_name):
+        if os.path.exists(file_name) and os.path.isfile(file_name):
             # Manda '1' se arquivo existir
             serverSocket.sendto('1'.encode(), clientAddress)
             print('Tem arquivo mano.')

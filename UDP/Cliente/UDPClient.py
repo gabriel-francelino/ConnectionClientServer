@@ -24,15 +24,18 @@ while True:
     if message.split()[0] == 'scp':
         # Separando o comando dos argumentos
         command, *args = message.strip().split()
-        clientSocket.sendto(args[0].encode(), (serverName, serverPort))
 
-        # separando o nome do arquivo do caminho dele
-        file_name = os.path.basename(args[0])
-        print(file_name)
+        # Se o parâmetro for menor que 1, file_name vai receber ' '
+        file_name = args[0] if len(args) > 0 else ' '
+        clientSocket.sendto(file_name.encode(), (serverName, serverPort))
+
 
         #vai ter um if aqui pra ver se o arquivo existe
         file_found, _ = clientSocket.recvfrom(2048)
         if file_found.decode() == '1':
+            # separando o nome do arquivo do caminho dele
+            file_name = os.path.basename(file_name)
+            print(file_name)
         
             # Recebendo o tamanho do arquivo
             file_size, _ = clientSocket.recvfrom(2048)
