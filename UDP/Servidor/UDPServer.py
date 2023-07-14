@@ -54,6 +54,8 @@ while True:
         
         # Verificando se o arquivo existe
         if os.path.exists(file_name):
+            # Manda '1' se arquivo existir
+            serverSocket.sendto('1'.encode(), clientAddress)
             print('Tem arquivo mano.')
 
             # Obtem o tamanho do arquivo
@@ -91,7 +93,10 @@ while True:
             # Enviando uma confirmação para o cliente
             serverSocket.sendto('Arquivo copiado com sucesso!'.encode(), clientAddress)
         else:
+            # Manda '0' se arquivo não existir
+            serverSocket.sendto('0'.encode(), clientAddress)
             print('Achei esse trem não')
+            
             # Enviando uma confirmação para o cliente
             serverSocket.sendto('Arquivo não encontrado!!'.encode(), clientAddress)
         
@@ -106,7 +111,7 @@ while True:
         pwd_command()
     elif command == 'ls':
         ls_command()
-    elif command == 'cd':
+    elif command == 'cd': # precisa verificar se tem argumentos
         cd_command(*args)
     elif command == 'scp':
         scp_command()

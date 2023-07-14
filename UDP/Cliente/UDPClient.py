@@ -30,31 +30,35 @@ while True:
         file_name = os.path.basename(args[0])
         print(file_name)
 
-        # Recebendo o tamanho do arquivo
-        file_size, _ = clientSocket.recvfrom(2048)
-        file_size = int(file_size.decode())
+        #vai ter um if aqui pra ver se o arquivo existe
+        file_found, _ = clientSocket.recvfrom(2048)
+        if file_found.decode() == '1':
+        
+            # Recebendo o tamanho do arquivo
+            file_size, _ = clientSocket.recvfrom(2048)
+            file_size = int(file_size.decode())
 
-        # Tamanho máximo do pacote
-        max_packet_size = 1400
+            # Tamanho máximo do pacote
+            max_packet_size = 1400
 
-        # Recebendo os dados do arquivo do servidor
-        file = open(file_name, 'wb')
-        while file_size > 0:
-            # Se o tamanho do arquivo for maior que o limite do pacote
-            # será recebido o a quantidade de dados max do pacote 
-            if(file_size > max_packet_size):
-                file_data, _ = clientSocket.recvfrom(max_packet_size)
-                file.write(file_data)
-                clientSocket.sendto('ACK'.encode(), (serverName, serverPort))
-                file_size -= max_packet_size
-            # Se não, será recebido o tamanho que falta
-            else:
-                file_data, _ = clientSocket.recvfrom(file_size)
-                file.write(file_data)
-                clientSocket.sendto('ACK'.encode(), (serverName, serverPort))
-                file_size -= file_size
-        file.close()
-        print('Chegou mais rápido que o SEDEX')
+            # Recebendo os dados do arquivo do servidor
+            file = open(file_name, 'wb')
+            while file_size > 0:
+                # Se o tamanho do arquivo for maior que o limite do pacote
+                # será recebido o a quantidade de dados max do pacote 
+                if(file_size > max_packet_size):
+                    file_data, _ = clientSocket.recvfrom(max_packet_size)
+                    file.write(file_data)
+                    clientSocket.sendto('ACK'.encode(), (serverName, serverPort))
+                    file_size -= max_packet_size
+                # Se não, será recebido o tamanho que falta
+                else:
+                    file_data, _ = clientSocket.recvfrom(file_size)
+                    file.write(file_data)
+                    clientSocket.sendto('ACK'.encode(), (serverName, serverPort))
+                    file_size -= file_size
+            file.close()
+            print('Chegou mais rápido que o SEDEX')
         
     
     # Recebendo a resposta modificada do servidor e o endereço do servidor
