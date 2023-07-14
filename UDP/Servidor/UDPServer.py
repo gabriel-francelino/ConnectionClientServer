@@ -35,7 +35,7 @@ while True:
 
     # Comando cd
     def cd_command(*args):
-        new_dir = args[0]
+        new_dir = args[0] if len(args) > 0 else ' '
 
         # Verifica se o diretório existe e muda para ele se existir
         if os.path.isdir(new_dir):
