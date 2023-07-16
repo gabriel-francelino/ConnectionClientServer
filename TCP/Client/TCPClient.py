@@ -1,4 +1,5 @@
-from socket import socket, SOCK_STREAM, AF_INET
+# Importando as bibliotecas necessárias
+import socket
 
 # Definindo o nome do servidor e a porta
 # Tem que alterar o serverName na hora de testar
@@ -8,7 +9,7 @@ serverPort = 12000
 # Criando um objeto de soquete TCP
 
 while True:
-    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Conecta o socket ao endereço do servidor e porta
     clientSocket.connect((serverName, serverPort))
 

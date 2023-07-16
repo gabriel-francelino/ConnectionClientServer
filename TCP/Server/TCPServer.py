@@ -1,10 +1,11 @@
-from socket import socket, SOCK_STREAM, AF_INET
+# importando as bibliotecas necessárias
+import socket
 
 # Define a porta do servidor
 serverPort = 12000
 
 # Cria um socket TCP
-serverSocket = socket(AF_INET, SOCK_STREAM)
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Associa o socket ao endereço do servidor e porta
 serverSocket.bind(('', serverPort))
