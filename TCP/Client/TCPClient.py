@@ -7,18 +7,18 @@ serverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete TCP
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# Conecta o socket ao endereço do servidor e porta
+clientSocket.connect((serverName, serverPort))
 
 while True:
-    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # Conecta o socket ao endereço do servidor e porta
-    clientSocket.connect((serverName, serverPort))
 
     # Solicita ao usuário uma sentença em letras minúsculas
     sentence = input('$: ')
 
     # O comando exit fecha o cliente
     if sentence == 'exit':
-        clientSocket.close()
+        #clientSocket.close()
         break
 
     # Envia a sentença codificada para o servidor através do socket
@@ -30,5 +30,5 @@ while True:
     # Imprime a resposta recebida do servidor
     print('From Server: ', modifiedSentence.decode())
 
-    # Fecha a conexão do socket
-    clientSocket.close()
+# Fecha a conexão do socket
+clientSocket.close()
