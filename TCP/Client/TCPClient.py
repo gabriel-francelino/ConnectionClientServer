@@ -1,5 +1,5 @@
 # Importando as bibliotecas necessárias
-import socket
+import socket, os
 
 # Definindo o nome do servidor e a porta
 # Tem que alterar o serverName na hora de testar
@@ -24,6 +24,40 @@ while True:
         #clientSocket.close()
         break
 
+    if sentence.split()[0] == 'scp':
+        
+        # Veirifica se o arquivo existe ou foi encontrado
+        file_found = clientSocket.recv(1024)
+        if file_found.decode() == '1':
+            # Separando o nome do arquivo do caminho dele
+            args = sentence.strip().split()[1]
+            file_name = os.path.basename(args)
+            
+            # Recebendo o tamanho do arquivo
+            file_size = clientSocket.recv(1024)
+            file_size = int(file_size.decode())
+            
+            # Tamanho máximo do pacote
+            max_packet_size = 1400
+            
+            #Recebendo os dados do arquivo do servidor
+            file = open(file_name, 'wb')
+            while file_size > 0:
+                # Se o tamanho do arquivo for maior que o limite do pacote
+                # será recebido o a quantidade de dados max do pacote 
+                if(file_size > max_packet_size):
+                    file_data = clientSocket.recv(max_packet_size)
+                    file.write(file_data)
+                    clientSocket.send('ACK'.encode())
+                    file_size -= max_packet_size
+                # Se não, será recebido o tamanho que falta
+                else:
+                    file_data = clientSocket.recv(file_size)
+                    file.write(file_data)
+                    clientSocket.send('ACK'.encode())
+                    file_size -= file_size
+            file.close()
+            print('Chegou mais rápido que o SEDEX')        
 
     # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
     modifiedSentence = clientSocket.recv(1024)
