@@ -46,9 +46,9 @@ while True:
         else:
             connectionSocket.send('Invalid directory'.encode())
     
-    if sentence.decode() == 'exit':
-        #connectionSocket.close()
-        break
+    # if sentence.decode() == 'exit':
+    #     #connectionSocket.close()
+    #     break
     
     # # Converte a sentença para letras maiúsculas
     # capitalizedSentence = sentence.upper()
@@ -65,6 +65,8 @@ while True:
         ls_command()
     elif(command == 'cd'):
         cd_command(*args)
+    elif(command == 'exit'):
+        break
     else:
         connectionSocket.send('Invalid command'.encode())
 
