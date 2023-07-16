@@ -70,4 +70,4 @@ while True:
 
 # Fecha a conexão do socket após a resposta ter sido enviada
 connectionSocket.close()
-#serverSocket.close()
+serverSocket.close()
