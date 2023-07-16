@@ -70,7 +70,7 @@ while True:
             
             # Abrindo arquivo para leitura binária
             file = open(file_name, 'rb')
-            # Enviando o arquivo para o servidor
+            # Enviando os dados do arquivo para o cliente
             print(f'Tamanho do arquivo a ser enviado: {file_size}')
             while file_size > 0:
                 #time.sleep(0.01)
