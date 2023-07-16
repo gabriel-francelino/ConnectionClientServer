@@ -20,7 +20,6 @@ print('The server is ready to receive')
 connectionSocket, addr = serverSocket.accept()
 
 while True:
-    
     # Recebe a sentença enviada pelo cliente através da conexão
     sentence, _ = connectionSocket.recvfrom(1024)
     print(sentence.decode())
@@ -98,12 +97,7 @@ while True:
             # Enviando uma confirmação para o cliente
             connectionSocket.send('Arquivo não encontrado!'.encode())
     
-    # # Converte a sentença para letras maiúsculas
-    # capitalizedSentence = sentence.upper()
-    
-    # # Envia a sentença modificada de volta ao cliente através da conexão
-    # connectionSocket.send(capitalizedSentence)
-    
+    # Separando o comando dos argumentos
     command, *args = sentence.decode().strip().split()
     args = args if len(args) > 0 else [' ']
     
