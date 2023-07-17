@@ -63,7 +63,6 @@ while True:
             file.close()
             print('Chegou mais rápido que o SEDEX')
         
-    
     # Recebendo a resposta modificada do servidor e o endereço do servidor
     modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
 
