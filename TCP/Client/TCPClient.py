@@ -1,9 +1,16 @@
 # Importando as bibliotecas necessárias
-import socket, os
+import socket, os, sys
+
+# Verifica se o número de argumentos está correto
+if len(sys.argv) != 2:
+    print("Usage: python script_name.py server_name")
+    exit(1)
+
+# Obtém o nome do servidor a partir do argumento fornecido
+serverName = sys.argv[1]
 
 # Definindo o nome do servidor e a porta
-# Tem que alterar o serverName na hora de testar
-serverName = 'localhost'
+#serverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete TCP
