@@ -24,7 +24,7 @@ while True:
     clientSocket.sendto(message.encode(), (serverName, serverPort))
     
     # O comando exit fecha o cliente
-    if message == 'exit':
+    if message.split()[0] == 'exit':
         break
     
     # Comando scp
