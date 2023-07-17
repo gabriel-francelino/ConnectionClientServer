@@ -47,23 +47,20 @@ while True:
             serverSocket.sendto('Invalid directory'.encode(), clientAddress)
 
     # Comando scp
-    def scp_command():
+    def scp_command(*args):
         # Recebendo o nome do arquivo
-        file_name, _ = serverSocket.recvfrom(2048)
-        file_name = file_name.decode()
+        file_name = args[0]
 
-        
         # Verificando se o arquivo existe
         if os.path.exists(file_name) and os.path.isfile(file_name):
             # Manda '1' se arquivo existir
             serverSocket.sendto('1'.encode(), clientAddress)
             print('Tem arquivo mano.')
 
-            # Obtem o tamanho do arquivo
+            # Obtem o tamanho do arquivo e envia para o cliente
             file_size = int(os.path.getsize(file_name))
-            
-            # Envia o tamanho do arquivo para o cliente
             serverSocket.sendto(str(file_size).encode(), clientAddress)
+            print(f'Tamanho do arquivo a ser enviado: {file_size}')
             
             # Tamanho máximo do pacote
             max_packet_size = 1400
@@ -71,21 +68,20 @@ while True:
             # Abrindo arquivo para leitura binária
             file = open(file_name, 'rb')
             # Enviando os dados do arquivo para o cliente
-            print(f'Tamanho do arquivo a ser enviado: {file_size}')
             while file_size > 0:
-                #time.sleep(0.01)
-                #print(f'falta: {file_size}')
                 # Se o tamanho do arquivo for maior que o limite do pacote
                 # será enviado o a quantidade de dados max do pacote
                 if(file_size > max_packet_size):
                     file_data = file.read(max_packet_size)
                     serverSocket.sendto(file_data, clientAddress)
+                    # Espera confirmação do cliente
                     serverSocket.recvfrom(2048)
                     file_size -= max_packet_size
                 # Se não, será enviado o tamanho que falta
                 else:
                     file_data = file.read(file_size)
                     serverSocket.sendto(file_data, clientAddress)
+                    # Espera confirmação do cliente
                     serverSocket.recvfrom(2048)
                     file_size -= file_size
             file.close()
@@ -100,12 +96,10 @@ while True:
             
             # Enviando uma confirmação para o cliente
             serverSocket.sendto('Arquivo não encontrado!!'.encode(), clientAddress)
-        
-            
-        
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
+    args = args if len(args) > 0 else [' ']
 
     # Execução dos comando
     if command == 'pwd':     
@@ -115,7 +109,11 @@ while True:
     elif command == 'cd': # precisa verificar se tem argumentos
         cd_command(*args)
     elif command == 'scp':
-        scp_command()
+        scp_command(*args)
+    elif command == 'exit':
+        break
     else:
         serverSocket.sendto('Invalid command'.encode(), clientAddress)
 
+# Fechando o soquete do servidor
+serverSocket.close()

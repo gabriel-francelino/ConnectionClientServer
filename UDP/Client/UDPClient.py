@@ -13,28 +13,21 @@ while True:
     # Entrada dos comandos
     message = input('$: ')
     
+    # Enviando o comando para o servidor especificado pelo nome e porta
+    clientSocket.sendto(message.encode(), (serverName, serverPort))
+    
     # O comando exit fecha o cliente
     if message == 'exit':
         break
     
-    # Enviando o comando para o servidor especificado pelo nome e porta
-    clientSocket.sendto(message.encode(), (serverName, serverPort))
-    
     # Comando scp
     if message.split()[0] == 'scp':
-        # Separando o comando dos argumentos
-        command, *args = message.strip().split()
-
-        # Se o parâmetro for menor que 1, file_name vai receber ' '
-        file_name = args[0] if len(args) > 0 else ' '
-        clientSocket.sendto(file_name.encode(), (serverName, serverPort))
-
-
         #vai ter um if aqui pra ver se o arquivo existe
         file_found, _ = clientSocket.recvfrom(2048)
         if file_found.decode() == '1':
             # separando o nome do arquivo do caminho dele
-            file_name = os.path.basename(file_name)
+            args = message.strip().split()[1]
+            file_name = os.path.basename(args)
             print(file_name)
         
             # Recebendo o tamanho do arquivo

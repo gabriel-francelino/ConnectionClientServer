@@ -24,8 +24,7 @@ while True:
         #clientSocket.close()
         break
 
-    if sentence.split()[0] == 'scp':
-        
+    if sentence.split()[0] == 'scp': 
         # Veirifica se o arquivo existe ou foi encontrado
         file_found = clientSocket.recv(1024)
         if file_found.decode() == '1':
