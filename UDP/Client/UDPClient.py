@@ -1,9 +1,12 @@
 # importando o módulo de soquete
 import socket, os, sys
 
+def print_error(message):
+    print('\033[91m' + message + '\033[0m')
+
 # Verifica se o número de argumentos está correto
 if len(sys.argv) != 2:
-    print("Usage: python script_name.py server_name")
+    print_error("Uso: python3 script_name.py server_name")
     exit(1)
 
 # Obtém o nome do servidor a partir do argumento fornecido

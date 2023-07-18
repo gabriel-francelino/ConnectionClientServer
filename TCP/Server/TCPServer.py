@@ -13,11 +13,18 @@ serverSocket.bind(('', serverPort))
 # O socket entra em modo de escuta, permitindo uma conexão
 serverSocket.listen(1)
 
-# Imprime uma mensagem indicando que o servidor está pronto para receber conexões
-print('The server is ready to receive')
+def print_error(message):
+    print('\033[91m' + message + '\033[0m')
+    
+def print_success(message):
+    print('\033[92m' + message + '\033[0m')
+    
+# Imprimindo uma mensagem para indicar que o servidor está pronto para receber conexões
+print_success('O servidor está pronto para receber conexões')
 
 # Aguarda uma conexão de um cliente
 connectionSocket, addr = serverSocket.accept()
+
 
 # Definindo funções dos camandos
 # Comando pwd
@@ -38,9 +45,9 @@ def cd_command(*args):
     if os.path.isdir(new_dir):
         os.chdir(new_dir)
         current_dir = os.getcwd()
-        connectionSocket.send(f'Current directory: {current_dir}'.encode())
+        connectionSocket.send(f'Diretório atual: {current_dir}'.encode())
     else:
-        connectionSocket.send('Invalid directory'.encode())
+        connectionSocket.send('Diretório inválido'.encode())
 
 # Comando scp
 def scp_command(*args):
@@ -50,12 +57,12 @@ def scp_command(*args):
     if os.path.exists(file_name) and os.path.isfile(file_name):
         # Manda '1' se arquivo existir
         connectionSocket.send('1'.encode())
-        print('Tem arquivo mano.')
+        print_success('Tem arquivo mano.')
         
         # Obtém o tamanho do arquivo e enviando para o cliente
         file_size = os.path.getsize(file_name)
         connectionSocket.send(str(file_size).encode())
-        print(f'Tamanho do arquivo a ser enviado: {file_size}')
+        print_success(f'Tamanho do arquivo a ser enviado: {file_size} bytes')
         
         # Tamanho máximo do pacote
         max_packet_size = 1400
@@ -80,14 +87,14 @@ def scp_command(*args):
                 connectionSocket.recv(1024)
                 file_size -= file_size
         file.close()
-        print('Tá tudo entregue parceiro.')
+        print_success('Tá tudo entregue parceiro.')
         
         # Enviando uma confirmação para o cliente
         connectionSocket.send('Arquivo copiado com sucesso!'.encode())
     else:
         # Manda '0' se arquivo não existir
         connectionSocket.send('0'.encode())
-        print('Não tem arquivo mano.')
+        print_error('Achei esse trem não.')
         
         # Enviando uma confirmação para o cliente
         connectionSocket.send('Arquivo não encontrado!'.encode())
@@ -95,7 +102,7 @@ def scp_command(*args):
 while True:
     # Recebe a sentença enviada pelo cliente através da conexão
     sentence, _ = connectionSocket.recvfrom(1024)
-    print(sentence.decode())
+    print('Menssagem recebida do cliente: ' + sentence.decode())
     
     # Separando o comando dos argumentos
     command, *args = sentence.decode().strip().split()
@@ -112,7 +119,7 @@ while True:
     elif(command == 'exit'):
         break
     else:
-        connectionSocket.send('Invalid command'.encode())
+        connectionSocket.send('Comando inválido'.encode())
 
 # Fecha a conexão do socket após a resposta ter sido enviada
 connectionSocket.close()

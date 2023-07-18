@@ -10,8 +10,15 @@ serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Vinculando o soquete do servidor a um endereço IP vazio e à porta especificada
 serverSocket.bind(('', serverPort))
 
+
+def print_error(message):
+    print('\033[91m' + message + '\033[0m')
+    
+def print_success(message):
+    print('\033[92m' + message + '\033[0m')
+    
 # Imprimindo uma mensagem para indicar que o servidor está pronto para receber conexões
-print('The server is ready to receive')
+print_success('O servidor está pronto para receber conexões')
 
 # Comando pwd
 def pwd_command(clientAddress):
@@ -32,9 +39,9 @@ def cd_command(clientAddress, *args):
     if os.path.isdir(new_dir):
         os.chdir(new_dir)
         current_dir = os.getcwd()
-        serverSocket.sendto(f'Current directory: {current_dir}'.encode(), clientAddress)
+        serverSocket.sendto(f'Diretório atual: {current_dir}'.encode(), clientAddress)
     else:
-        serverSocket.sendto('Invalid directory'.encode(), clientAddress)
+        serverSocket.sendto('Diretório inválido'.encode(), clientAddress)
 
 # Comando scp
 def scp_command(clientAddress, *args):
@@ -45,12 +52,12 @@ def scp_command(clientAddress, *args):
     if os.path.exists(file_name) and os.path.isfile(file_name):
         # Manda '1' se arquivo existir
         serverSocket.sendto('1'.encode(), clientAddress)
-        print('Tem arquivo mano.')
+        print_success('Tem arquivo mano.')
 
         # Obtem o tamanho do arquivo e envia para o cliente
         file_size = int(os.path.getsize(file_name))
         serverSocket.sendto(str(file_size).encode(), clientAddress)
-        print(f'Tamanho do arquivo a ser enviado: {file_size}')
+        print_success(f'Tamanho do arquivo a ser enviado: {file_size} bytes')
         
         # Tamanho máximo do pacote
         max_packet_size = 1400
@@ -75,14 +82,14 @@ def scp_command(clientAddress, *args):
                 serverSocket.recvfrom(2048)
                 file_size -= file_size
         file.close()
-        print('Tá tudo entregue parceiro')
+        print_success('Tá tudo entregue parceiro')
 
         # Enviando uma confirmação para o cliente
         serverSocket.sendto('Arquivo copiado com sucesso!'.encode(), clientAddress)
     else:
         # Manda '0' se arquivo não existir
         serverSocket.sendto('0'.encode(), clientAddress)
-        print('Achei esse trem não')
+        print_error('Achei esse trem não')
         
         # Enviando uma confirmação para o cliente
         serverSocket.sendto('Arquivo não encontrado!!'.encode(), clientAddress)
@@ -93,7 +100,7 @@ while True:
     message, clientAddress = serverSocket.recvfrom(2048)
 
     # Imprimindo a mensagem recebida do cliente
-    print('Message received from client: ', message.decode())
+    print('Menssagem recebida do cliente: ', message.decode())
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
@@ -111,7 +118,7 @@ while True:
     elif command == 'exit':
         break
     else:
-        serverSocket.sendto('Invalid command'.encode(), clientAddress)
+        serverSocket.sendto('Comando inválido'.encode(), clientAddress)
 
 # Fechando o soquete do servidor
 serverSocket.close()
