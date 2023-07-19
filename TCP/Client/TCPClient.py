@@ -30,7 +30,7 @@ while True:
     clientSocket.send(sentence.encode())
 
     # O comando exit fecha o cliente
-    if sentence == 'exit':
+    if sentence.split()[0] == 'exit':
         #clientSocket.close()
         break
 
