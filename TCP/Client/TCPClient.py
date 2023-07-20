@@ -31,7 +31,9 @@ while True:
     # clientSocket.send(sentence.encode())
     # clientSocket.recv(1024)
 
-    if sentence.split()[0] == 'pwd':
+    cmd = sentence.split()[0]
+
+    if cmd == 'pwd':
         # Envia a sentença codificada para o servidor através do socket
         clientSocket.send(sentence.encode())
         clientSocket.recv(1024)
@@ -41,7 +43,7 @@ while True:
         message = modifiedSentence.decode()
         clientSocket.send('ACK'.encode())
 
-    elif sentence.split()[0] == 'ls':
+    elif cmd == 'ls':
         # Envia a sentença codificada para o servidor através do socket
         clientSocket.send(sentence.encode())
         clientSocket.recv(1024)
@@ -51,7 +53,7 @@ while True:
         message = modifiedSentence.decode()
         clientSocket.send('ACK'.encode())
 
-    elif sentence.split()[0] == 'cd':
+    elif cmd == 'cd':
         # Envia a sentença codificada para o servidor através do socket
         clientSocket.send(sentence.encode())
         clientSocket.recv(1024)
@@ -62,14 +64,14 @@ while True:
         clientSocket.send('ACK'.encode())
 
     # O comando exit fecha o cliente
-    elif sentence.split()[0] == 'exit':
+    elif cmd == 'exit':
         # Envia a sentença codificada para o servidor através do socket
         clientSocket.send(sentence.encode())
         clientSocket.recv(1024)
         #clientSocket.close()
         break
 
-    elif sentence.split()[0] == 'scp': 
+    elif cmd == 'scp': 
         # Envia a sentença codificada para o servidor através do socket
         clientSocket.send(sentence.encode())
         clientSocket.recv(1024)
