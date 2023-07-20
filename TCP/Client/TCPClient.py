@@ -117,13 +117,15 @@ while True:
             # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
             modifiedSentence = clientSocket.recv(1024)
             message = modifiedSentence.decode()
-            clientSocket.send('ACK6'.encode())   
+            clientSocket.send('ACK6'.encode())  
+    else:
+        print('Comando inválido!') 
 
     # # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
     # modifiedSentence = clientSocket.recv(1024)
 
     # Imprime a resposta recebida do servidor
-    print(message)
+    if message != '': print(message)
 
 # Fecha a conexão do socket
 clientSocket.close()
