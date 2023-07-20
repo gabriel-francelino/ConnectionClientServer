@@ -25,18 +25,58 @@ while True:
 
     # Solicita ao usuário uma sentença em letras minúsculas
     sentence = input('$: ')
+    message = ''
     
-    # Envia a sentença codificada para o servidor através do socket
-    clientSocket.send(sentence.encode())
+    # # Envia a sentença codificada para o servidor através do socket
+    # clientSocket.send(sentence.encode())
+    # clientSocket.recv(1024)
+
+    if sentence.split()[0] == 'pwd':
+        # Envia a sentença codificada para o servidor através do socket
+        clientSocket.send(sentence.encode())
+        clientSocket.recv(1024)
+
+        # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+        modifiedSentence = clientSocket.recv(1024)
+        message = modifiedSentence.decode()
+        clientSocket.send('ACK'.encode())
+
+    elif sentence.split()[0] == 'ls':
+        # Envia a sentença codificada para o servidor através do socket
+        clientSocket.send(sentence.encode())
+        clientSocket.recv(1024)
+
+        # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+        modifiedSentence = clientSocket.recv(1024)
+        message = modifiedSentence.decode()
+        clientSocket.send('ACK'.encode())
+
+    elif sentence.split()[0] == 'cd':
+        # Envia a sentença codificada para o servidor através do socket
+        clientSocket.send(sentence.encode())
+        clientSocket.recv(1024)
+
+        # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+        modifiedSentence = clientSocket.recv(1024)
+        message = modifiedSentence.decode()
+        clientSocket.send('ACK'.encode())
 
     # O comando exit fecha o cliente
-    if sentence.split()[0] == 'exit':
+    elif sentence.split()[0] == 'exit':
+        # Envia a sentença codificada para o servidor através do socket
+        clientSocket.send(sentence.encode())
+        clientSocket.recv(1024)
         #clientSocket.close()
         break
 
-    if sentence.split()[0] == 'scp': 
+    elif sentence.split()[0] == 'scp': 
+        # Envia a sentença codificada para o servidor através do socket
+        clientSocket.send(sentence.encode())
+        clientSocket.recv(1024)
+
         # Veirifica se o arquivo existe ou foi encontrado
         file_found = clientSocket.recv(1024)
+        clientSocket.send('ACK1'.encode())
         if file_found.decode() == '1':
             # Separando o nome do arquivo do caminho dele
             args = sentence.strip().split()[1]
@@ -44,6 +84,7 @@ while True:
             
             # Recebendo o tamanho do arquivo
             file_size = clientSocket.recv(1024)
+            clientSocket.send('ACK2'.encode())
             file_size = int(file_size.decode())
             
             # Tamanho máximo do pacote
@@ -57,22 +98,32 @@ while True:
                 if(file_size > max_packet_size):
                     file_data = clientSocket.recv(max_packet_size)
                     file.write(file_data)
-                    clientSocket.send('ACK'.encode())
+                    clientSocket.send('ACK3'.encode())
                     file_size -= max_packet_size
                 # Se não, será recebido o tamanho que falta
                 else:
                     file_data = clientSocket.recv(file_size)
                     file.write(file_data)
-                    clientSocket.send('ACK'.encode())
+                    clientSocket.send('ACK4'.encode())
                     file_size -= file_size
             file.close()
-            print('Chegou mais rápido que o SEDEX')        
+            print('Chegou mais rápido que o SEDEX')  
 
-    # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
-    modifiedSentence = clientSocket.recv(1024)
+            # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+            modifiedSentence = clientSocket.recv(1024)
+            message = modifiedSentence.decode()
+            clientSocket.send('ACK5'.encode())
+        else:
+            # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+            modifiedSentence = clientSocket.recv(1024)
+            message = modifiedSentence.decode()
+            clientSocket.send('ACK6'.encode())   
+
+    # # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
+    # modifiedSentence = clientSocket.recv(1024)
 
     # Imprime a resposta recebida do servidor
-    print(modifiedSentence.decode())
+    print(message)
 
 # Fecha a conexão do socket
 clientSocket.close()

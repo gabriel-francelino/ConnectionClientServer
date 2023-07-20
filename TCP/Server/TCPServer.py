@@ -32,12 +32,14 @@ def pwd_command():
     # Obtém o diretório atual
     current_dir = os.getcwd()
     connectionSocket.send(current_dir.encode())
+    connectionSocket.recv(1024)
     
 # Comando ls
 def ls_command():
     # Transforma a lista de arquivos em uma string
     file_list = '\n'.join(os.listdir())
     connectionSocket.send(file_list.encode())
+    connectionSocket.recv(1024)
     
 # Comando cd
 def cd_command(*args):
@@ -46,8 +48,10 @@ def cd_command(*args):
         os.chdir(new_dir)
         current_dir = os.getcwd()
         connectionSocket.send(f'Diretório atual: {current_dir}'.encode())
+        connectionSocket.recv(1024)
     else:
         connectionSocket.send('Diretório inválido'.encode())
+        connectionSocket.recv(1024)
 
 # Comando scp
 def scp_command(*args):
@@ -57,11 +61,13 @@ def scp_command(*args):
     if os.path.exists(file_name) and os.path.isfile(file_name):
         # Manda '1' se arquivo existir
         connectionSocket.send('1'.encode())
+        connectionSocket.recv(1024)
         print_success('Tem arquivo mano.')
         
         # Obtém o tamanho do arquivo e enviando para o cliente
         file_size = os.path.getsize(file_name)
         connectionSocket.send(str(file_size).encode())
+        connectionSocket.recv(1024)
         print_success(f'Tamanho do arquivo a ser enviado: {file_size} bytes')
         
         # Tamanho máximo do pacote
@@ -91,17 +97,21 @@ def scp_command(*args):
         
         # Enviando uma confirmação para o cliente
         connectionSocket.send('Arquivo copiado com sucesso!'.encode())
+        connectionSocket.recv(1024)
     else:
         # Manda '0' se arquivo não existir
         connectionSocket.send('0'.encode())
+        connectionSocket.recv(1024)
         print_error('Achei esse trem não.')
         
         # Enviando uma confirmação para o cliente
         connectionSocket.send('Arquivo não encontrado!'.encode())
+        connectionSocket.recv(1024)
         
 while True:
     # Recebe a sentença enviada pelo cliente através da conexão
     sentence, _ = connectionSocket.recvfrom(1024)
+    connectionSocket.send('ACK'.encode())
     print('Menssagem recebida do cliente: ' + sentence.decode())
     
     # Separando o comando dos argumentos
