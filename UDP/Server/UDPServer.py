@@ -1,4 +1,4 @@
-# importando as bibliotecas necessárias
+# Importando as bibliotecas necessárias
 import socket, os
 
 # Definindo a porta do servidor
@@ -10,10 +10,11 @@ serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 # Vinculando o soquete do servidor a um endereço IP vazio e à porta especificada
 serverSocket.bind(('', serverPort))
 
-
+# Imprime mensagens vermelhas
 def print_error(message):
     print('\033[91m' + message + '\033[0m')
     
+# Imprime mensagens verdes
 def print_success(message):
     print('\033[92m' + message + '\033[0m')
     
@@ -100,7 +101,7 @@ while True:
     message, clientAddress = serverSocket.recvfrom(2048)
 
     # Imprimindo a mensagem recebida do cliente
-    print('Menssagem recebida do cliente: ', message.decode())
+    print(f'Mensagem recebida do cliente: \033[1;34m{message.decode()}\033[0m')
  
     # Separando o comando dos argumentos
     command, *args = message.decode().strip().split()
@@ -111,7 +112,7 @@ while True:
         pwd_command(clientAddress)
     elif command == 'ls':
         ls_command(clientAddress)
-    elif command == 'cd': # precisa verificar se tem argumentos
+    elif command == 'cd':
         cd_command(clientAddress, *args)
     elif command == 'scp':
         scp_command(clientAddress, *args)

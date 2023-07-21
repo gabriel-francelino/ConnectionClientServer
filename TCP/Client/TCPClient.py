@@ -1,6 +1,7 @@
 # Importando as bibliotecas necessárias
 import socket, os, sys
 
+# Imprime mensagens vermelhas
 def print_error(message):
     print('\033[91m' + message + '\033[0m')
 
@@ -13,7 +14,7 @@ if len(sys.argv) != 2:
 serverName = sys.argv[1]
 
 # Definindo o nome do servidor e a porta
-#serverName = 'localhost'
+# serverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete TCP
@@ -22,14 +23,9 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientSocket.connect((serverName, serverPort))
 
 while True:
-
-    # Solicita ao usuário uma sentença em letras minúsculas
-    sentence = input('$: ')
+    # Solicita ao usuário uma sentença
+    sentence = input('\033[1;33m$:\033[0m ')
     message = ''
-    
-    # # Envia a sentença codificada para o servidor através do socket
-    # clientSocket.send(sentence.encode())
-    # clientSocket.recv(1024)
 
     cmd = sentence.split()[0]
 
@@ -92,7 +88,7 @@ while True:
             # Tamanho máximo do pacote
             max_packet_size = 1400
             
-            #Recebendo os dados do arquivo do servidor
+            # Recebendo os dados do arquivo do servidor
             file = open(file_name, 'wb')
             while file_size > 0:
                 # Se o tamanho do arquivo for maior que o limite do pacote
@@ -122,9 +118,6 @@ while True:
             clientSocket.send('ACK6'.encode())  
     else:
         print('Comando inválido!') 
-
-    # # Recebe a resposta do servidor, com tamanho máximo de 1024 bytes
-    # modifiedSentence = clientSocket.recv(1024)
 
     # Imprime a resposta recebida do servidor
     if message != '': print(message)
