@@ -1,6 +1,7 @@
-# importando o módulo de soquete
+# Importando o módulo de soquete
 import socket, os, sys
 
+# Imprime mensagens vermelhas
 def print_error(message):
     print('\033[91m' + message + '\033[0m')
 
@@ -13,7 +14,7 @@ if len(sys.argv) != 2:
 serverName = sys.argv[1]
 
 # Definindo o nome do servidor e a porta
-#serverName = 'localhost'
+#s erverName = 'localhost'
 serverPort = 12000
 
 # Criando um objeto de soquete UDP
@@ -21,7 +22,7 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 while True:
     # Entrada dos comandos
-    message = input('$: ')
+    message = input('\033[1;33m$:\033[0m ')
     
     # Enviando o comando para o servidor especificado pelo nome e porta
     clientSocket.sendto(message.encode(), (serverName, serverPort))
