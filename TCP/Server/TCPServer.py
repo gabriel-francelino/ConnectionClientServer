@@ -1,4 +1,4 @@
-# importando as bibliotecas necessárias
+# Importando as bibliotecas necessárias
 import socket, os
 
 # Define a porta do servidor
@@ -13,9 +13,11 @@ serverSocket.bind(('', serverPort))
 # O socket entra em modo de escuta, permitindo uma conexão
 serverSocket.listen(1)
 
+# Imprime mensagens vermelhas
 def print_error(message):
     print('\033[91m' + message + '\033[0m')
-    
+
+# Imprime mensagens verdes
 def print_success(message):
     print('\033[92m' + message + '\033[0m')
     
@@ -25,8 +27,8 @@ print_success('O servidor está pronto para receber conexões')
 # Aguarda uma conexão de um cliente
 connectionSocket, addr = serverSocket.accept()
 
+# * Definindo funções dos camandos
 
-# Definindo funções dos camandos
 # Comando pwd
 def pwd_command():
     # Obtém o diretório atual
@@ -112,7 +114,7 @@ while True:
     # Recebe a sentença enviada pelo cliente através da conexão
     sentence, _ = connectionSocket.recvfrom(1024)
     connectionSocket.send('ACK'.encode())
-    print('Menssagem recebida do cliente: ' + sentence.decode())
+    print(f'Mensagem recebida do cliente: \033[1;34m{sentence.decode()}\033[0m')
     
     # Separando o comando dos argumentos
     command, *args = sentence.decode().strip().split()

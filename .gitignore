@@ -4,6 +4,10 @@ TCP/Client/*.mkv
 TCP/Client/*.pdf
 TCP/Client/*.txt
 TCP/Client/*.gif
+TCP/Client/*.mp4
+TCP/Client/*.svg
+
+arc/*.mp4
 
 UDP/Client/*.jpeg
 UDP/Client/*.jpg
@@ -11,3 +15,5 @@ UDP/Client/*.mkv
 UDP/Client/*.pdf
 UDP/Client/*.txt
 UDP/Client/*.gif
+UDP/Client/*.mp4
+UDP/Client/*.svg
